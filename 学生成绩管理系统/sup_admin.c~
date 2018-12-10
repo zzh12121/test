@@ -1,0 +1,172 @@
+#ifndef SUP_ADMIN_H
+#define SUP_ADMIN_H
+#include"common.h"
+void adm_add(void);//添加或删除管理员函数
+int adm_sec_num(int num);//通过工号查找编号
+void super_administrators_interface_son(void);//界面函数
+extern struct Admin admin[20];
+int adm_count=0;
+int adm_sec_num(int num)
+{
+	for(int i=0;i<adm_count;i++)
+	{
+		if(admin[i].state=='2')
+		continue;
+		if(num==admin[i].number)
+		return i;
+	}
+	return -1;
+}
+void replace_adm(void)
+{
+	puts("输入要重置密码的管理员的工号:");
+	int num=0;
+	scanf("%d",&num);
+	getchar();
+	int index=adm_sec_num(num);
+	if(-1==index)
+	{
+		puts("查无此管理员");
+		anykey_continue();
+	}
+	else
+	{
+		strcpy("123456",admin[index].code);
+		puts("重置密码成功");
+		anykey_continue();
+	}
+	
+}
+void unlock_adm(void)
+{
+	puts("输入要解锁的管理员的工号:");
+	int num=0;
+	scanf("%d",&num);
+	getchar();
+	int index=adm_sec_num(num);
+	if(-1==index)
+	{
+		puts("查无此管理员");
+		anykey_continue();
+	}
+	else
+	{
+		admin[index].state='0';
+		puts("解锁成功");
+		anykey_continue();
+	}
+}
+void list_adm(void)
+{
+	system("clear");
+	for(int i=0;i<adm_count;i++)
+	{
+		if(admin[i].state=='2')
+		continue;
+		else
+		printf("%s %d\n",admin[i].name,admin[i].number);
+	}
+	anykey_continue();
+	
+}
+void super_administrators_interface_son(void)
+{
+	while(1)
+	{
+		system("clear");
+		puts("1.添加或删除管理员");
+		puts("2.重置管理员密码");
+		puts("3.解锁管理员账号");
+		puts("4.显示所有管理员");
+		puts("5.返回上级菜单");
+		switch(getch())
+		{
+			case 49:adm_add();;break;
+			case 50:replace_adm();;break;
+			case 51:unlock_adm();;break;
+			case 52:list_adm();;break;
+			case 53:return;		
+		}
+	}
+}
+void adm_add(void)
+{
+	system("clear");
+	puts("1.添加管理员");
+	puts("2.删除管理员");
+	puts("3.返回上级菜单");
+	while(1)
+	{
+		int num=0;
+		switch(getch())
+			{
+				case 49:
+				admin[adm_count].number=201801+adm_count;
+				puts("请输入添加管理员的姓名");
+				get_str(admin[adm_count].name,20);
+				puts("请输入管理员的性别:1.男 2.女");
+				admin[adm_count].sex=getchar();
+				strcpy("123456",admin[adm_count].code);
+				puts("请输入添加管理员的出生年");
+				scanf("%d",&admin[adm_count].year);
+				puts("请输入添加管理员的入职年份");
+				scanf("%d",&admin[adm_count].work_year);
+				admin[adm_count].state='0';
+				printf("添加成功！！！\n");
+				getchar();
+				anykey_continue();
+				adm_count++;
+				return;
+						;break;
+				case 50:
+				puts("请输入要删除的管理员的工号：");
+				scanf("%d",&num);
+				getchar();
+				int index=adm_sec_num(num);
+				if(-1==index)
+				{
+					puts("查无此管理员");
+					anykey_continue();
+					return;
+				}
+				else
+				{
+					admin[index].state='2';
+					puts("删除成功");
+					anykey_continue();
+					return;
+				}
+						;break;	
+				case 51:return;break;
+			}
+	}
+};
+#endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
